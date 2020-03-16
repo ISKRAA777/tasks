@@ -1,13 +1,17 @@
 package com.crud.tasks.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.crud.tasks.mapper.TaskMapper;
+import com.crud.tasks.service.DbService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import com.crud.tasks.domain.TaskDto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 //Zazwyczaj REST API są udostępniane pod adresami typu /api/method — właśnie
 // to chcemy osiągnąć.
 //W tym celu musimy określić adres w naszej aplikacji. Aby tego dokonać, wewnątrz
@@ -18,14 +22,19 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/task")
 public class TaskController {
-    @RequestMapping(method = RequestMethod.GET,value = "getTasks")
+    @Autowired
+    private DbService service;
+    @Autowired
+    private TaskMapper taskMapper;
+
+    @RequestMapping(method = RequestMethod.GET, value = "getTasks")
     public List<TaskDto> getTasks() {
-        return new ArrayList<>();
+        return taskMapper.mapTaskDtoList(service.getAllTasks());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "getTask")
-    public TaskDto getTask(Long taskId) {
-        return new TaskDto(1L, "test title", "test_content");
+    public TaskDto getTask(@RequestParam Long taskId) throws TaskNotFoundException {
+        return taskMapper.mapToTaskDto(service.getTask(taskId).orElseThrow(TaskNotFoundException::new));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "deleteTask")
@@ -37,7 +46,15 @@ public class TaskController {
         return new TaskDto(1L, "Edit test title", "Test content");
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "createTask")
-    public void CreateTask(TaskDto taskDto) {
+    //było :@RequestMapping(method = RequestMethod.POST, value = "createTask")
+    //    public void CreateTask(TaskDto taskDto) {
+    //jest po zmianie zgodnie z Kolejną nową rzeczą jest adnotacja @RequestBody, która
+    // pojawiła się w ciele metody createTask() - informuje ona Springa o tym, że powinien
+    // szukać obiektu (a dokładnie jego reprezentacji w formacie JSON, co określiliśmy za
+    // pomocą consumes) w ciele (body) żądania.
+
+    @RequestMapping(method = RequestMethod.POST, value = "createTask", consumes = APPLICATION_JSON_VALUE)
+    public void createTask(@RequestBody TaskDto taskDto) {
+        service.saveTask(taskMapper.mapToTask(taskDto));
     }
 }
