@@ -43,10 +43,14 @@ import java.util.Collections;
 @Configuration
 public class CoreConfiguration implements WebMvcConfigurer{
 
+
+
     @Bean
     public RestTemplate restTemplate(){
         return new RestTemplate();
     }
+
+
 
 
     @Bean
@@ -63,12 +67,14 @@ public class CoreConfiguration implements WebMvcConfigurer{
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "My REST API",
-                "My 1st REST API created during Kodilla course.",
+                "My 1st REST API created ...1902...during Kodilla course.",
                 "API_1.0",
                 "Terms of service",
                 new Contact("Aleksander ISKRA", "http://ISKRAA777.github.io", "${admin.mail}"),
                 "", "", Collections.emptyList());
     }
+
+
 
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 // Required by Swagger UI configuration
