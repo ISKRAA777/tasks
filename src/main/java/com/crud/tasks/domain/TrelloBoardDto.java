@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class TrelloBoardDto {
     @JsonProperty("id")
     private String id;
