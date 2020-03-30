@@ -17,7 +17,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 // naszego API (wykonujemy je pierwszy raz, dlatego v1 jest najlepszym
 // rozwiązaniem). Dzięki tej operacji, nasz RestController będzie
 // dostępny pod poniższym adresem: http://localhost:8080/v1/task
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("v1/task")
 public class TaskController {
