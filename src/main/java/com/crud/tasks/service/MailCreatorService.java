@@ -49,7 +49,6 @@ public class MailCreatorService {
 
     public String buildScheduledEmail(String message) {
 
-
         List<String> functionality = new ArrayList<>();
         functionality.add("You can manage your tasks");
         functionality.add("Provides connection with Trello Account");
